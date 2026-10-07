@@ -64,10 +64,14 @@ class OverlayService : Service() {
         windowManager?.addView(overlayView, params)
     }
 
-    private var initialX = 0, initialY = 0
-    private var initialTouchX = 0f, initialTouchY = 0f
-    private var lastTapTime = 0L, touchStartTime = 0L
-    private var hasMoved = false, tapCount = 0
+    private var initialX = 0
+    private var initialY = 0
+    private var initialTouchX = 0f
+    private var initialTouchY = 0f
+    private var lastTapTime = 0L
+    private var touchStartTime = 0L
+    private var hasMoved = false
+    private var tapCount = 0
 
     private fun createTouchLister() = View.OnTouchListener { _, event ->
         when (event.action) {
