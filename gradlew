@@ -125,4 +125,9 @@ if $cygwin || $msys ; then
     CLASSPATH=$( cygpath --path --mixed "$CLASSPATH" )
     JAVACMD=$( cygpath --unix "$JAVACMD" )
     # Now convert the arguments - kludge to limit ourselves to /bin/sh
-eval set -- $DEFAULT_JVM_OPTS $JAVA_OPTS $GRADLE_OPTS "-Dorg.gradle.appname=$APP_BASE_NAME" -classpath $CLASSPATH org.gradle.wrapper.GradleWrapperMain "$@"
+    eval set -- $DEFAULT_JVM_OPTS $JAVA_OPTS $GRADLE_OPTS "-Dorg.gradle.appname=$APP_BASE_NAME" -classpath $CLASSPATH org.gradle.wrapper.GradleWrapperMain "$@"
+else
+    eval set -- $DEFAULT_JVM_OPTS $JAVA_OPTS $GRADLE_OPTS "-Dorg.gradle.appname=$APP_BASE_NAME" -classpath $CLASSPATH org.gradle.wrapper.GradleWrapperMain "$@"
+fi
+
+exec "$JAVACMD" "$@"
