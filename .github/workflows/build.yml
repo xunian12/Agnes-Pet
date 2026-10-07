@@ -19,6 +19,10 @@ jobs:
           
       - name: Grant execute permission
         run: chmod +x ./gradlew
+
+      # 新增：自动生成缺失的 Gradle Wrapper 文件
+      - name: Generate Gradle Wrapper
+        run: gradle wrapper
         
       - name: Build APK
         run: ./gradlew assembleDebug
