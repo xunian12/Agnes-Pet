@@ -12,6 +12,7 @@ import android.view.*
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.webkit.WebSettings
+import android.util.Log
 import androidx.core.app.NotificationCompat
 
 class OverlayService : Service() {
@@ -23,8 +24,8 @@ class OverlayService : Service() {
     companion object {
         private const val CHANNEL_ID = "agnes_pet_channel"
         private const val NOTIFICATION_ID = 8888
-        private const val PET_SIZE_DP = 150
-        private const val PET_HEIGHT_DP = 200
+        private const val PET_SIZE_DP = 180
+        private const val PET_HEIGHT_DP = 260
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -48,20 +49,28 @@ class OverlayService : Service() {
         ).apply {
             gravity = Gravity.TOP or Gravity.START
             x = 50
-            y = 200
+            y = 120
         }
         overlayView = WebView(this).apply {
-            setBackgroundColor(0x00000000)
+            setBackgroundColor(android.graphics.Color.TRANSPARENT)
+            alpha = 1f
+            visibility = View.VISIBLE
             settings.apply {
                 javaScriptEnabled = true
                 domStorageEnabled = true
                 allowFileAccess = true
             }
-            webViewClient = WebViewClient()
+            webViewClient = object : WebViewClient() {
+                override fun onPageFinished(view: WebView, url: String) {
+                    super.onPageFinished(view, url)
+                    Log.d("AgnesPet", "pet.html loaded: $url, size=${view.width}x${view.height}")
+                }
+            }
             loadUrl("file:///android_asset/pet.html")
             setOnTouchListener(createTouchLister())
         }
         windowManager?.addView(overlayView, params)
+        Log.d("AgnesPet", "overlay added: ${params?.width}x${params?.height} at ${params?.x},${params?.y}")
     }
 
     private var initialX = 0
