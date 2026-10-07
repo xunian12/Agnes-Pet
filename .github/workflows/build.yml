@@ -17,10 +17,15 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           
+      # 新增：强制指定使用 Gradle 8.7 版本，避免默认的 Gradle 9 导致报错
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: 8.7
+
       - name: Grant execute permission
         run: chmod +x ./gradlew
-
-      # 新增：自动生成缺失的 Gradle Wrapper 文件
+        
       - name: Generate Gradle Wrapper
         run: gradle wrapper
         
