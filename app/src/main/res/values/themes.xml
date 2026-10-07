@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.AgnesPet" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="colorPrimary">#5B8DEF</item>
+        <item name="colorPrimaryVariant">#4A6FA5</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="android:statusBarColor">#5B8DEF</item>
+    </style>
+</resources>

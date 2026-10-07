@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agnes Pet</title>
+<style>
+body{width:100%;height:100%;overflow:hidden;background:transparent;margin:0;display:flex;justify-content:center;align-items:flex-end}
+#pet-container{position:absolute;width:100%;height:100%;display:flex;justify-content:center;align-items:flex-end}
+#agnes-cat{width:45%;height:auto;cursor:pointer;transition:transform 0.2s ease;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.2))}
+#bubble{position:absolute;top:15%;left:50%;transform:translateX(-50%);background:rgba(255,255,255,0.95);padding:8px 12px;border-radius:12px;font-size:12px;color:#2C3E50;opacity:0;transition:opacity 0.3s;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);max-width:100px;text-align:center}
+@keyframes breathe{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.03)}}
+@keyframes tailSwing{0%,100%{d:path("M 75 95 Q 95 85 90 70 Q 85 55 75 60")}50%{d:path("M 75 95 Q 100 90 95 75 Q 90 60 75 60")}}
+.idle .body{animation:breathe 3s ease-in-out infinite}
+.idle .tail{animation:tailSwing 4s ease-in-out infinite}
+</style>
+</head>
+<body>
+<div id="pet-container">
+<svg id="agnes-cat" class="idle" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+<path class="tail" d="M 75 95 Q 95 85 90 70 Q 85 55 75 60" fill="none" stroke="#5B8DEF" stroke-width="6" stroke-linecap="round"/>
+<g class="body">
+<ellipse cx="50" cy="85" rx="32" ry="28" fill="#5B8DEF"/>
+<ellipse cx="50" cy="50" rx="28" ry="25" fill="#5B8DEF"/>
+<polygon points="25,35 20,10 38,28" fill="#5B8DEF"/>
+<polygon points="75,35 80,10 62,28" fill="#5B8DEF"/>
+<ellipse cx="50" cy="90" rx="15" ry="10" fill="#7B9CFF"/>
+</g>
+<g class="eyes">
+<circle cx="40" cy="45" r="8" fill="#FFFFFF"/>
+<circle cx="60" cy="45" r="8" fill="#FFFFFF"/>
+<circle cx="40" cy="45" r="5" fill="#2C3E50" class="pupil"/>
+<circle cx="60" cy="45" r="5" fill="#2C3E50" class="pupil"/>
+<circle cx="42" cy="43" r="2" fill="#FFFFFF"/>
+<circle cx="62" cy="43" r="2" fill="#FFFFFF"/>
+</g>
+<line x1="20" y1="50" x2="35" y2="52" stroke="#5B8DEF" stroke-width="1.5"/>
+<line x1="20" y1="55" x2="35" y2="55" stroke="#5B8DEF" stroke-width="1.5"/>
+<line x1="65" y1="52" x2="80" y2="50" stroke="#5B8DEF" stroke-width="1.5"/>
+<line x1="65" y1="55" x2="80" y2="55" stroke="#5B8DEF" stroke-width="1.5"/>
+<path d="M 45 62 Q 50 68 55 62" fill="none" stroke="#2C3E50" stroke-width="2" stroke-linecap="round" class="mouth"/>
+<g class="glasses">
+<circle cx="40" cy="45" r="12" fill="none" stroke="#4A6FA5" stroke-width="1.5"/>
+<circle cx="60" cy="45" r="12" fill="none" stroke="#4A6FA5" stroke-width="1.5"/>
+<line x1="52" y1="45" x2="48" y2="45" stroke="#4A6FA5" stroke-width="1.5"/>
+<line x1="28" y1="45" x2="20" y2="42" stroke="#4A6FA5" stroke-width="1.5"/>
+<line x1="72" y1="45" x2="80" y2="42" stroke="#4A6FA5" stroke-width="1.5"/>
+</g>
+</svg>
+<div id="bubble"></div>
+</div>
+<script>
+const cat=document.getElementById('agnes-cat');
+const bubble=document.getElementById('bubble');
+const phrases=["喵~","想你啦","陪我玩","饿了","困了","嘻嘻"];
+let state='idle';
+function showBubble(){
+bubble.textContent=phrases[Math.floor(Math.random()*phrases.length)];
+bubble.style.opacity='1';
+setTimeout(()=>bubble.style.opacity='0',2000);
+}
+cat.addEventListener('click',()=>{
+showBubble();
+cat.style.transform='scale(1.1)';
+setTimeout(()=>cat.style.transform='scale(1)',200);
+});
+cat.addEventListener('touchstart',()=>{
+cat.classList.remove('idle');
+cat.classList.add('happy');
+setTimeout(()=>cat.classList.add('idle'),500);
+});
+setInterval(()=>{
+if(state==='idle')showBubble();
+},15000);
+</script>
+</body>
+</html>
