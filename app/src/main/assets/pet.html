@@ -52,26 +52,26 @@ html,body{width:100%;height:100%;min-height:100%;overflow:hidden;background:tran
 <script>
 const cat=document.getElementById('agnes-cat');
 const bubble=document.getElementById('bubble');
-const phrases=["喵~","想你啦","陪我玩","饿了","困了","嘻嘻"];
-let state='idle';
-function showBubble(){
-bubble.textContent=phrases[Math.floor(Math.random()*phrases.length)];
-bubble.style.opacity='1';
-setTimeout(()=>bubble.style.opacity='0',2000);
+let bubbleTimer=null;
+function showBubble(text){
+  bubble.textContent=text;
+  bubble.style.opacity='1';
+  clearTimeout(bubbleTimer);
+  bubbleTimer=setTimeout(()=>bubble.style.opacity='0',2200);
 }
-cat.addEventListener('click',()=>{
-showBubble();
-cat.style.transform='scale(1.1)';
-setTimeout(()=>cat.style.transform='scale(1)',200);
-});
-cat.addEventListener('touchstart',()=>{
-cat.classList.remove('idle');
-cat.classList.add('happy');
-setTimeout(()=>cat.classList.add('idle'),500);
-});
-setInterval(()=>{
-if(state==='idle')showBubble();
-},15000);
+function animate(kind){
+  cat.classList.remove('idle','happy','shy','angry','sleeping','jealous');
+  cat.classList.add(kind);
+  cat.style.transform=kind==='angry'?'rotate(-8deg) scale(1.08)':kind==='sleeping'?'scale(.94)':kind==='shy'?'scale(.96)': 'scale(1.1)';
+  setTimeout(()=>{cat.classList.remove(kind);cat.classList.add('idle');cat.style.transform='scale(1)'},700);
+}
+window.agnesPet={
+  onTap(){ animate('happy'); showBubble('喵~摸摸我'); },
+  onDoubleTap(){ animate('shy'); showBubble('被你发现啦'); },
+  onTripleTap(){ animate('jealous'); showBubble('不许停下'); },
+  onLongPress(){ animate('angry'); showBubble('哼，再按我就生气啦'); }
+};
+cat.addEventListener('click',()=>{});
 </script>
 </body>
 </html>

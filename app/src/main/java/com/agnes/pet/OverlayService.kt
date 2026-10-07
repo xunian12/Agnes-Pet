@@ -20,6 +20,7 @@ class OverlayService : Service() {
     private var overlayView: WebView? = null
     private var params: WindowManager.LayoutParams? = null
     private val handler = Handler(Looper.getMainLooper())
+    private var pendingTap: Runnable? = null
 
     companion object {
         private const val CHANNEL_ID = "agnes_pet_channel"
@@ -101,15 +102,28 @@ class OverlayService : Service() {
             MotionEvent.ACTION_UP -> {
                 val elapsed = System.currentTimeMillis() - touchStartTime
                 if (!hasMoved) {
-                    val now = System.currentTimeMillis()
-                    if (now - lastTapTime < 300) {
-                        tapCount++
-                        if (tapCount >= 3) onTripleTap() else onDoubleTap()
-                    } else {
+                    if (elapsed > 600) {
+                        pendingTap?.let { handler.removeCallbacks(it) }
                         tapCount = 0
-                        if (elapsed > 600) onLongPress() else onTap()
+                        onLongPress()
+                    } else {
+                        val now = System.currentTimeMillis()
+                        tapCount = if (now - lastTapTime < 320) tapCount + 1 else 1
+                        lastTapTime = now
+                        pendingTap?.let { handler.removeCallbacks(it) }
+                        if (tapCount >= 3) {
+                            tapCount = 0
+                            onTripleTap()
+                        } else {
+                            val count = tapCount
+                            val action = Runnable {
+                                if (count == 1) onTap() else onDoubleTap()
+                                if (tapCount == count) tapCount = 0
+                            }
+                            pendingTap = action
+                            handler.postDelayed(action, 340L)
+                        }
                     }
-                    lastTapTime = now
                 }
             }
         }
